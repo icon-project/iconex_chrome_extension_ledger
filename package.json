@@ -1,5 +1,5 @@
 {
-  "name": "ledger_html",
+  "name": "iconex_chrome_extension_ledger",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -34,5 +34,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@ledgerhq/hw-transport-u2f": "^5.36.0-deprecated",
+    "@ledgerhq/hw-app-icx": "file:packages/hw-app-icx",
+    "bignumber.js": "^9.0.1"
   }
 }

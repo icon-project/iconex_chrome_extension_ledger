@@ -1,4 +1,8 @@
-# Getting Started with Create React App
+# ICONex Chrome Extension Ledger
+
+This project is the source for connecting Ledger Nano-S in Chrome Extension.
+
+## Getting Started 
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
