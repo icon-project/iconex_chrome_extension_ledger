@@ -1,4 +1,4 @@
-# ICONex Chrome Extension Ledger
+# Ledger Integration for ICONex Chrome Extension
 
 This project is the source for connecting Ledger Nano-S in Chrome Extension.
 
