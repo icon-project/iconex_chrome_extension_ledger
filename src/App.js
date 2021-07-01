@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import TransportU2F from "@ledgerhq/hw-transport-u2f";
+import TransportWebHID from "@ledgerhq/hw-transport-webhid";
 import Icx from "@ledgerhq/hw-app-icx";
 import BigNumber from "bignumber.js";
 import "./style/common.css";
@@ -73,7 +73,7 @@ class App extends Component {
   checkError = async callback => {
     try {
       this.setState({ walletLoading: true });
-      const transport = await TransportU2F.create();
+      const transport = await TransportWebHID.create();
       transport.setDebugMode(false);
       const icx = new Icx(transport);
       const path = `44'/4801368'/0'/0'/${0}'`;
@@ -87,7 +87,7 @@ class App extends Component {
   getAddress = async (index, callback) => {
     try {
       this.setState({ walletLoading: true });
-      const transport = await TransportU2F.create();
+      const transport = await TransportWebHID.create();
       transport.setDebugMode(false);
       const icx = new Icx(transport);
       let walletList = [],
@@ -136,7 +136,7 @@ class App extends Component {
       delete rawTx.popupType;
 
       const phraseToSign = generateHashKey(rawTx);
-      const transport = await TransportU2F.create();
+      const transport = await TransportWebHID.create();
       const icx = new Icx(transport);
       const signedData = await icx.signTransaction(path, phraseToSign);
       const { signedRawTxBase64, hashHex } = signedData;
