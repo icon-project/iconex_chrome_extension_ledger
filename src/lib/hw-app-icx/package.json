@@ -14,7 +14,7 @@
   "main": "lib/Icx.js",
   "license": "Apache-2.0",
   "dependencies": {
-    "@ledgerhq/hw-transport": "^4.13.0"
+    "@ledgerhq/hw-transport": "^5.43.0"
   },
   "devDependencies": {
     "flow-bin": "^0.68.0",
