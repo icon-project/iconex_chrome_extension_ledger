@@ -32,6 +32,9 @@ const POPUP_TYPE = {
 };
 
 class App extends Component {
+
+  static icx;
+
   constructor(props) {
     super(props);
     const message = queryString.parse(window.location.search, {
@@ -87,16 +90,20 @@ class App extends Component {
   getAddress = async (index, callback) => {
     try {
       this.setState({ walletLoading: true });
-      const transport = await TransportWebHID.create();
-      transport.setDebugMode(false);
-      const icx = new Icx(transport);
+
+      if (!App.icx) {
+        const transport = await TransportWebHID.create();
+        transport.setDebugMode(false);
+        App.icx = new Icx(transport);
+      }
+
       let walletList = [],
         paramArr = [],
         balanceArr = [];
 
       for (let i = index * UNIT; i < index * UNIT + UNIT; i++) {
         const path = `44'/4801368'/0'/0'/${i}'`;
-        const { address } = await icx.getAddress(path, false, true);
+        const { address } = await App.icx.getAddress(path, false, true);
         const _address = address.toString();
         walletList.push({
           path,
@@ -365,6 +372,11 @@ class App extends Component {
         </div>
       </div>
     );
+  }
+
+  componentDidMount() {
+    // after component mount trigger init first page wallet addresses
+    this.moveWalletList(0);
   }
 }
 
