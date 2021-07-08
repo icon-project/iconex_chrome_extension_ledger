@@ -76,11 +76,9 @@ class App extends Component {
   checkError = async callback => {
     try {
       this.setState({ walletLoading: true });
-      const transport = await TransportWebHID.create();
-      transport.setDebugMode(false);
-      const icx = new Icx(transport);
+      await this.initLedgerTransport();
       const path = `44'/4801368'/0'/0'/${0}'`;
-      const { address } = await icx.getAddress(path, false, true);
+      const { address } = await App.icx.getAddress(path, false, true);
       callback();
     } catch (error) {
       window.parent.postMessage(JSON.stringify({ error }), "*");
@@ -91,11 +89,7 @@ class App extends Component {
     try {
       this.setState({ walletLoading: true });
 
-      if (!App.icx) {
-        const transport = await TransportWebHID.create();
-        transport.setDebugMode(false);
-        App.icx = new Icx(transport);
-      }
+      await this.initLedgerTransport();
 
       let walletList = [],
         paramArr = [],
@@ -121,6 +115,7 @@ class App extends Component {
       });
       this.setState({ walletList, walletLoading: false }, callback);
     } catch (error) {
+      console.error(error);
       window.parent.postMessage(JSON.stringify({ error }), "*");
     }
   };
@@ -130,6 +125,14 @@ class App extends Component {
       this.setState({ walletIndex: index });
     });
   };
+
+  async initLedgerTransport() {
+    if (!App.icx) {
+      const transport = await TransportWebHID.create();
+      transport.setDebugMode(false);
+      App.icx = new Icx(transport);
+    }
+  }
 
   signTransaction = async (path, param) => {
     try {
@@ -143,9 +146,8 @@ class App extends Component {
       delete rawTx.popupType;
 
       const phraseToSign = generateHashKey(rawTx);
-      const transport = await TransportWebHID.create();
-      const icx = new Icx(transport);
-      const signedData = await icx.signTransaction(path, phraseToSign);
+      await this.initLedgerTransport();
+      const signedData = await App.icx.signTransaction(path, phraseToSign);
       const { signedRawTxBase64, hashHex } = signedData;
       rawTx["signature"] = signedRawTxBase64;
 
@@ -374,10 +376,6 @@ class App extends Component {
     );
   }
 
-  componentDidMount() {
-    // after component mount trigger init first page wallet addresses
-    this.moveWalletList(0);
-  }
 }
 
 class Pagination extends Component {
